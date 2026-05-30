@@ -12,11 +12,19 @@ from database import get_db, init_db
 
 app = Flask(__name__)
 # Allow frontend on default and fallback ports (e.g. when 5173 is in use, Vite may use 5174)
-CORS(app, origins=[
-    "http://localhost:5173", "http://localhost:5174", "http://localhost:3000",
-    "http://127.0.0.1:5173", "http://127.0.0.1:5174",
-])
-
+CORS(
+    app,
+    resources={
+        r"/api/*": {
+            "origins": [
+                "https://greengoo-frontend.onrender.com",
+                "http://localhost:5173",
+                "http://localhost:3000",
+                "http://127.0.0.1:5173"
+            ]
+        }
+    }
+)
 # Ensure database exists and is initialized
 if not os.path.exists(os.path.dirname(DATABASE_PATH)):
     os.makedirs(os.path.dirname(DATABASE_PATH), exist_ok=True)
